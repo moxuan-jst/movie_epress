@@ -4,12 +4,16 @@
 */ 
 var express = require('express');
 var router = express.Router();
+// 用户数据集
 var user = require('../models/users');
 // 用于加密
 var crypto = require('crypto');
+// 评论数据集
+var comment = require('../models/comment');
+
 var movie = require('../models/movie');
 var mail = require('../models/mail');
-var comment = require('../models/comment');
+
 
 const init_token = 'TKL02o';
 
@@ -80,12 +84,81 @@ router.post('/register', function(req, res, next){
 
 // 提交评论
 router.post('/postComment', function(req, res, next){
+  /*
+    通过用户的 username （如果用户不发送相关的 username，默认为匿名用户）、用户的名称和电影ID来确定一条评论，默认需要审核。
+  */  
+  var username = req.body.username;
+  var movie_id = req.body.movie_id;
+  var context = req.body.context;
 
+  // 验证完整性
+  if(!username){
+    var username = "匿名用户";
+  }
+  if(!movie_id){
+    res.json({status: 1, meg: "电影id为空"})
+  }
+  if(!context){
+    res.json({status: 1, meg: "评论内容为空"})
+  }
+  // 根据数据集建立新的数据内容
+  var saveComment = new comment({
+    movie_id: movie_id,
+    username: username,
+    context: context,
+    check: 0
+  });
+  // 保存数据集
+  saveComment.save(function(e){
+    if(e){
+      res.json({status: 1, meg: e})
+    }else{
+      res.json({status: 1, meg: "评论成功"})
+    }
+  })
 });
 
 // 点赞
 router.post('/support', function(req, res, next){
+/*
+  只需要将电影ID对应的点赞字端 加1 即可
+*/ 
+var movie_id = req.body.movie_id;
 
+// 保存数据集
+// var saveSupport = new movie({
+//   movie_id: movie_id
+// })
+if(!movie_id){
+  res.json({status: 1, meg: "没有对应的电影ID"})
+}
+// movie.findById(movie_id, function(e, supportMovie){
+  movie.updateOne({_id: movie_id}, {movieNumSuppose: movieNumSuppose+1}, function(e){  // supportMovie.movieNumSuppose+1
+    if(e){
+      res.json({status: 1, meg: e})
+    }else{
+      res.json({status: 0, meg: "点赞成功"})
+    }
+  })
+// })
+});
+
+// 下载
+router.post('/download', function(req, res, next){
+  var movie_id = req.body.movie_id;
+  if(!movie_id){
+    res.josn({status: 1, meg: "电影ID传递失败"})
+  }
+  movie.findById(movie_id, function(e, supportMovie){
+    // 更新操作
+    movie.update({_id: movie_id}, {movieDolnload: supportMovie.movieDolnload+1}, function(e){
+      if(e){
+        res.json({status: 1, meg: "下载失败", data: e});
+      }else{
+        res.json({status: 0, meg: "下载成功", data: supportMovie.movieDolnload});
+      }
+    })
+  })
 });
 
 // 找回密码
@@ -99,7 +172,7 @@ router.post('/findPassword', function(req, res, next){
   var repassword = req.body.repassword;
   var userMail = req.body.userMail;
   var userPhone = req.body.userPhone;
-  var token =req.body.token
+  var token =req.body.token;
 
   if(repassword){
     // 存在时，验证其登录情况或者验证其 code
@@ -166,13 +239,82 @@ router.post('/findPassword', function(req, res, next){
 
 // 发送站内信
 router.post('/sendEmail', function(req, res, next){
-
+  var token = req.body.token;
+  var user_id = req.body.user_id;
+  var toUsername = req.body.toUsername;
+  var title = req.body.title;
+  var context = req.body.context;
+  // 验证完整性
+  if(!token){
+    res.json({status: 1, meg: "用户登录状态错误"})
+  }
+  if(!user_id){
+    res.json({status: 1, meg: "用户登录出错"})
+  }
+  if(!toUsername){
+    res.json({status: 1, meg: "未选择发送的用户"})
+  }
+  if(!title){
+    res.json({status: 1, meg: "标题不能为空"})
+  }
+  if(!context){
+    res.json({status: 1, meg: "内容不能为空"})
+  }
+  if(token == getMD5password(user_id)){
+    // 存入数据库之前现在数据库中获取到要发送至用户的 user_id
+    user.findByUsername(toUsername, function(e, toUser){
+      if(toUsername.length != 0){
+        var NewEmail = new mail({
+          fromUser: user_id,
+          toUser: toUser[0]._id,
+          title: title,
+          context: context
+        })
+        NewEmail.save(function(){
+          res.json({status: 0, meg: "发送成功"})
+        })
+      }else{
+        res.json({statis: 1, meg: "您发送的对象不存在"})
+      }
+    })
+  }else{
+    res.json({status: 1, meg: "用户登录错误"})
+  }
 });
 
 // 显示站内信，其中receive参数的值为1时是发送的内容，为2是收到的内容
 router.post('/showEmail', function(req, res, next){
+  var token = req.body.token;
+  var user_id = req.body.user_id;
+  var receive = req.body.receive;
 
+  // 验证完整性
+  if(!token){
+    res.json({status: 1, meg: "用户登录状态错误"})
+  }
+  if(!user_id){
+    res.json({status: 1, meg: "用户登录出错"})
+  }
+  if(!receive){
+    res.json({status: 1, meg: "参数出错"})
+  }
+  if(token == getMD5password(user_id)){
+    if(receive == 1){
+      // 发送的站内信
+      mail.findByFromUserId(user_id, function(e, sendMail){
+        res.json({status: 0, meg: "获取成功1", data: sendMail})
+    })
+    }else{
+      // 接受的站内信
+      mail.findByToUserId(user_id, function(e, receiveMail){
+        res.json({status: 0, meg: "获取成功2", data: receiveMail})
+      })
+    }
+  }else{
+    res.json({status: 1, meg: "用户登录错误"})
+  }
 });
+
 
 // 获取MD5值
 function getMD5password(id){
