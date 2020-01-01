@@ -2,3 +2,4 @@
 book_service/node_modules/
 film/node_modules/
 package-lock.json
+.~lock..gitignore#
