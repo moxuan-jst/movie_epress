@@ -1,8 +1,8 @@
-# film
+# 后台管理
 
-> A Vue.js project
+> 电影网站的后台管理（vue）
 
-## Build Setup
+## 开始构建
 
 ``` bash
 # install dependencies
@@ -18,4 +18,40 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 搭建日志
+
+### 2020-01-01
+
+- 开始构建
+
+- 将所有代码上传git仓库
+
+- 采用`vue-resource`进行网络请求
+
+- 解决跨域问题
+
+  - vue.js
+
+    - 对于不支持跨域的服务器端的请求，可以使用`vue-resource`的`jsonp()`方法
+
+      ```js
+      this.$http.jsonp('url',[data], [options]).then(successCallback, errorCallback);
+      ```
+
+    - `jsonp()`不能发送post请求，不管是否跨域。
+
+  - 服务端，在`app.js`中进行全路由的配置。
+
+    ```js
+    app.all('*', function(req, res, next){
+    	res.header('Access-Control-Allow-Origin', '*');
+    	res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With, yourHeaderFeild');
+    	res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    	if(req.methods == 'OPTIONS'){
+    		res.send(200);
+    	}else{
+    		next();
+    	}
+    });
+    ```
+
