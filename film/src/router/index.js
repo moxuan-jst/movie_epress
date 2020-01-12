@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axios from 'axios'
+import Vueaxios from 'vue-axios'
 
 import movieList from '../pages/moviesList'
 import MovieDetail from '../pages/movieDetail'
@@ -11,6 +13,7 @@ import UserInfo from '../pages/userInfo'
 import SendEmail from '../pages/sendEmail'
 
 Vue.use(Router)
+Vue.use(Vueaxios, axios)
 
 export default new Router({
   routes: [

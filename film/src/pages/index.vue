@@ -12,7 +12,15 @@
 
     <div class="contentPic">
       <!-- 展示大图组件 -->
-      <index-header-pic></index-header-pic>
+      <!-- 各种list组件并用v-for来遍历获得的数据 -->
+      <index-header-pic 
+      v-for="item in headerItems" 
+      :key="item._id" 
+      :recommendImg="item.recommendImg" 
+      :recommendSrc="item.recommendSrc" 
+      :recommendTitle="item.recommendTitle"
+      >
+      </index-header-pic>
     </div>
 
     <div class="contentMain">
@@ -47,12 +55,37 @@ import NewsList from '../components/NewsList';
 import MoviesList from '../components/MovieList';
 import IndexHeaderPic from '../components/IndexHeaderPic';
 import UserMessage from '../components/UserMessage';
+import axios from 'axios'
+import Vueaxios from 'vue-axios'
 
 export default {
   data() {
     return {
-
+      // 获取主页推荐，主页新闻列表和主页电影列表，并将获得的内容放置在定义的变量中
+      headerItems: [],
+      newsItems: [],
+      movieItems: []
     }
+  },
+  // 获得数据，获取主页推荐，主页新闻列表和主页电影列表
+  created(){
+    // 主页推荐
+    axios.get('http://localhost:3000/showIndex').then(Response => {
+      this.headerItems = Response.data;
+      // console.log(this.headerItems)
+    })
+    
+    // 获取新闻
+    axios.get('http://localhost:3000/showArticle').then(Response => {
+      this.newsItems = Response.data;
+      // console.log(this.newsItems)
+    })
+
+    // 获取所有电影
+    axios.get('http://localhost:3000/showRanking').then(Response => {
+      this.movieItems = Response.data;
+      // console.log(this.movieItems)
+    })
   },
   // 注册组件
   components: {

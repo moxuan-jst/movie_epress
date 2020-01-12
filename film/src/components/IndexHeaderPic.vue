@@ -2,8 +2,8 @@
   <div class="headerPic">
     <div>
       <p class="imgTitle">{{ recommendTitle }}</p>
-      <a href="baidu.com">
-        <img src="../assets/1_130326114005_1.jpg" class="headerImg" alt="头部图片">
+      <a :href="recommendSrc">
+        <img :src="recommendImg" class="headerImg" alt="头部图片">
       </a>
     </div>
   </div>
@@ -11,14 +11,9 @@
 
 <script>
 export default {
-  data() {
-    return {
-      recommendTitle: ''
-    }
-  },
-  components: {
+  // 组件间值传递
+  props:['recommendSrc', 'recommendImg', 'recommendTitle']
 
-  }
 }
 </script>
 
