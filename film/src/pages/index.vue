@@ -14,19 +14,25 @@
       <!-- 展示大图组件 -->
       <!-- 各种list组件并用v-for来遍历获得的数据 -->
       <index-header-pic 
-      v-for="item in headerItems" 
-      :key="item._id" 
+
+      >
+      <!-- v-for="item in headerItems" 
+      :key="item.id" 
       :recommendImg="item.recommendImg" 
       :recommendSrc="item.recommendSrc" 
-      :recommendTitle="item.recommendTitle"
-      >
+      :recommendTitle="item.recommendTitle" -->
       </index-header-pic>
     </div>
 
     <div class="contentMain">
-      <div>
-        <div class="contentLeft">
-          <ul class="cont-ul">
+      <Row>
+        <i-col span="11" offset="1">
+          <Card>
+            <p slot="title">
+              <Icon type="ios-film"></Icon>
+              电影
+            </p>
+            <ul class="cont-ul">
             <!-- 引入 movieslist -->
             <movies-list
               v-for="item in movieItems"
@@ -36,11 +42,15 @@
               :movieTime="item.movieTime"
             ></movies-list>
           </ul>
-        </div>
-      </div>
-      <div>
-        <div class="contentRight">
-          <ul class="cont-ul">
+          </Card>
+        </i-col>
+        <i-col span="10" offset="1">
+          <Card>
+            <p slot="title">
+              <Icon type="ios-paper"></Icon> 
+              新闻
+            </p>
+            <ul class="cont-ul">
             <!-- list 组件展示 -->
             <news-list
               v-for="item in newsItems"
@@ -50,8 +60,9 @@
               :articleTime="item.articleTime"
             ></news-list>
           </ul>
-        </div>
-      </div>
+          </Card>
+        </i-col>
+      </Row>
     </div>
 
     <!-- footer 组件 -->
@@ -117,29 +128,17 @@ export default {
     margin: 0 auto;
   }
   .contentMain{
-    height: 50px;
+    padding-top: 15px;
   }
   .userMessage{
-    padding-top: 60px;
-    margin-top: -10px;
-    margin-left: -10px;
+    margin-top: 0px;
+    margin-left: 0px;
   }
   .contentPic{
     padding-top: 5px;
   }
-  .contentLeft{
-    width: 60%;
-    float: left;
-    margin-top:5px;
-    border-top: 1px solid #000;
-  }
-  .contentRight{
-    width: 38%;
-    margin-left: 1%;
-    float: left;
-    margin-top:5px;
-    border-top: 1px solid #000;
-  }
+
+
   .cont-ul{
     padding-top: 0.5rem;
     background-color: #fff;

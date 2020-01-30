@@ -1,6 +1,6 @@
 <template>
-  <li class="goods-list">
-    <div class="newsList">
+  <div class="newsList">
+    <div>
       <router-link 
       to="{path: '/newDetail', query: {id: id}}" 
       class="goods-list-link">
@@ -8,7 +8,7 @@
         {{articleTimeShow}}
       </router-link>
     </div>
-  </li>
+  </div>
 </template>
 
 <script>
@@ -32,7 +32,6 @@ export default {
 <style scoped lang="css">
   .newsList{
     padding: 5px;
-    font-size: 10px;
     border-bottom: 1px solid #ababab;
   }
 </style>

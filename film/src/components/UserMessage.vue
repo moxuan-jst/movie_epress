@@ -1,13 +1,21 @@
 <template>
   <div class="header" v-if=!isLogin>
-    <router-link to="/LoginPage">
-      <div class="header_menu">登录</div>
-    </router-link>
+    <Row>
+      <i-col span="2" offset="22">
+        <router-link to="/LoginPage">
+          <div class="header_menu"><Icon type="ios-person"></Icon>登录</div>
+        </router-link>
+      </i-col>
+    </Row>
   </div>
   <div v-else class="header">
-    <router-link :to="{path: '/userInfo', query: {id: id}}">
-      <div class="header_menu">已登录：{{username}}</div>
-    </router-link>
+    <Row>
+      <i-col span="2" offset="22">
+        <router-link :to="{path: '/userInfo', query: {id: id}}">
+          <div class="header_menu"><Icon type="ios-person"></Icon>已登录：{{username}}</div>
+        </router-link>
+      </i-col>
+    </Row>
   </div>
 </template>
 
@@ -40,13 +48,13 @@ export default {
     left: 0;
     top: 0;
     color: #000;
-    background-color: #C3BD5C;
+    background-color: #c3bbbb;
   }
   .header_menu{
-    padding-right: 60px;
-    padding-top: 10px;
-    float: right;
+    /* padding-right: 60px; */
+    padding-top: 6px;
+    /* float: right; */
     color: #fff;
-    font-size: 8px;
+    font-size: 12px;
   }
 </style>
