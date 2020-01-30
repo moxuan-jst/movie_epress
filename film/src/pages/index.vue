@@ -5,23 +5,10 @@
       <movie-index-header></movie-index-header>
     </div>
 
-    <div class="userMessage">
-      <!-- 展示引入的用户信息组件 -->
-      <user-message></user-message>
-    </div>
-
     <div class="contentPic">
       <!-- 展示大图组件 -->
       <!-- 各种list组件并用v-for来遍历获得的数据 -->
-      <index-header-pic 
-
-      >
-      <!-- v-for="item in headerItems" 
-      :key="item.id" 
-      :recommendImg="item.recommendImg" 
-      :recommendSrc="item.recommendSrc" 
-      :recommendTitle="item.recommendTitle" -->
-      </index-header-pic>
+      <index-header-pic></index-header-pic>
     </div>
 
     <div class="contentMain">
@@ -134,10 +121,6 @@ export default {
     margin-top: 0px;
     margin-left: 0px;
   }
-  .contentPic{
-    padding-top: 5px;
-  }
-
 
   .cont-ul{
     padding-top: 0.5rem;

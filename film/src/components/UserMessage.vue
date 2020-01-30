@@ -1,22 +1,14 @@
 <template>
-  <div class="header" v-if=!isLogin>
-    <Row>
-      <i-col span="2" offset="22">
-        <router-link to="/LoginPage">
-          <div class="header_menu"><Icon type="ios-person"></Icon>登录</div>
-        </router-link>
-      </i-col>
-    </Row>
-  </div>
-  <div v-else class="header">
-    <Row>
-      <i-col span="2" offset="22">
-        <router-link :to="{path: '/userInfo', query: {id: id}}">
-          <div class="header_menu"><Icon type="ios-person"></Icon>已登录：{{username}}</div>
-        </router-link>
-      </i-col>
-    </Row>
-  </div>
+  <Menu mode="horizontal" theme="dark" v-if=!isLogin>
+    <router-link to="/LoginPage">
+      <MenuItem name="1" id="menuitem"><Icon type="ios-person"></Icon>登录</MenuItem>
+    </router-link>
+  </Menu>
+  <Menu v-else mode="horizontal" theme="dark">
+    <router-link :to="{path: '/userInfo', query: {id: id}}">
+      <MenuItem name="2" id="menuitem"><Icon type="ios-person"></Icon>已登录：{{username}}</MenuItem>
+    </router-link>
+  </Menu>
 </template>
 
 <script>
@@ -40,21 +32,8 @@ export default {
   }
 }
 </script>
-
-<style scoped lang="css">
-  .header{
-    width: 103%;
-    height: 30px;
-    left: 0;
-    top: 0;
-    color: #000;
-    background-color: #c3bbbb;
-  }
-  .header_menu{
-    /* padding-right: 60px; */
-    padding-top: 6px;
-    /* float: right; */
-    color: #fff;
-    font-size: 12px;
+<style lang="css" scoped>
+  #menuitem {
+    font-size: 16px;
   }
 </style>

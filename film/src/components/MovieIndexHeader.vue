@@ -1,39 +1,37 @@
 <template lang="html">
-  <Menu mode="horizontal" theme="dark" active-name="1">
-      <router-link to="/">
-        <MenuItem name="1">
-          <Icon type="ios-paper"></Icon>
-          主页
-        </MenuItem>
-      </router-link>
-      <router-link to="/movieList">
-        <MenuItem name="2">
-          <Icon type="ios-people"></Icon>
-          电影
-        </MenuItem>   
-      </router-link>
-  </Menu>
+<Row>
+    <Menu mode="horizontal" theme="dark" active-name="1">
+        <router-link to="/">
+          <MenuItem name="1"  id="menuitem">
+            <Icon type="md-home" />
+            主页
+          </MenuItem>
+        </router-link>
+        <router-link to="/movieList">
+          <MenuItem name="2" id="menuitem">
+            <Icon type="ios-people"/>
+            电影
+          </MenuItem>   
+        </router-link>
+        <i-col offset="21">
+          <MenuItem name="3">
+            <user-message></user-message>
+          </MenuItem>
+        </i-col>
+    </Menu>
+</Row>
 </template>
-
+ 
 <script>
-
+import UserMessage from "../components/UserMessage";
+export default {
+  components: {
+    UserMessage
+  }
+};
 </script>
-
-<style scoped lang="css">
-/* .header{
-  width: 100%;
-  height: 60px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  color: #000;
-  background-color: #a5a5a5;
-  border-bottom: 2px solid #000;
-}
-.header_menu{
-  padding-left: 60px;
-  padding-top: 20px;
-  float: left;
-  color: #ffffff;
-} */
+<style scoped>
+  #menuitem{
+    font-size: 16px;
+  }
 </style>
